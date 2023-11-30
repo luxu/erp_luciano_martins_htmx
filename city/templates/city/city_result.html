@@ -1,0 +1,27 @@
+<tr id="trCity{{ object.pk }}">
+  <td>
+    <a href="" data-toggle="modal" data-target="#detailModal"
+      hx-get="{% url 'city_detail' object.pk %}"
+      hx-target="#detailContent">{{ object.id }}
+    </a>
+  </td>
+  <td>{{ object.description }}</td>
+  <td>{{ object.created_at }}</td>
+  <td>
+    <span
+      data-toggle="modal"
+      data-target="#updateModal"
+      hx-get="{% url 'city_update' object.pk %}"
+      hx-target="#updateContent">
+      <i class="fa fa-edit link span-is-link"></i>
+    </span>
+    <span
+      hx-delete="{% url 'city_delete' object.pk %}"
+      hx-confirm="Deseja mesmo deletar?"
+      hx-target="closest tr"
+      hx-swap="outerHTML swap:500ms"
+    >
+      <i class="fa fa-trash no span-is-link pl-2"></i>
+    </span>
+  </td>
+</tr>

@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+    <div class="jumbotron">
+        <h3>ERP - Sistema de Gestão Pessoal</h3>
+        <canvas id="myChart" width="100" height="50"></canvas>
+    </div>
+{% endblock content %}
+{% block js %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const citiesData = {{ cities|safe }};
+        const cityID = citiesData.map(city => city.id);
+        const cityNomes = citiesData.map(city => city.nome);
+        const ctx = document.getElementById('myChart');
+        const myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+              labels: cityNomes,
+              datasets: [{
+                label: 'População por Cidade',
+                data: cityID,
+                lineTension: 0,
+                backgroundColor: 'transparent',
+                borderColor: '#007bff',
+                borderWidth: 4,
+                pointBackgroundColor: '#007bff'
+              }]
+            },
+            options: {
+              plugins: {
+                legend: {
+                  display: false
+                },
+                tooltip: {
+                  boxPadding: 3
+                }
+              }
+            }
+        });
+    </script>
+{% endblock js %}
