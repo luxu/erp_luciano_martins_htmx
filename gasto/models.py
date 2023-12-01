@@ -13,6 +13,8 @@ class Segmento(Base):
         verbose_name = "Segmento do Comercio"
         verbose_name_plural = "Segmentos do Comercio"
         ordering = ["-name"]
+        db_table = 'website_segmento'
+
 
 
 class Cardbank(Base):
@@ -25,6 +27,7 @@ class Cardbank(Base):
         verbose_name = "Banco do cartão"
         verbose_name_plural = "Bancos do cartão"
         ordering = ["-id"]
+        db_table = 'website_cardbank'
 
 
 def cardbank_default():
@@ -85,6 +88,7 @@ class Parcelas(models.Model):
     class Meta:
         verbose_name = "Parcela do gasto"
         verbose_name_plural = "Parcelas dos gasto"
+        db_table = 'website_parcelas'
 
     def __str__(self):
         return f"Total de parcelas..: {self.parcelas}"
