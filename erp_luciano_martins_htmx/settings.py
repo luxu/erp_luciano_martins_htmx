@@ -58,27 +58,27 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'erp_luciano_martins_htmx.wsgi.application'
 
-# default_db_url = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
-# DATABASES = {
-#     'default': config(
-#         'DATABASE_URL', default=default_db_url, cast=db_url
-#     )
-# }
-
+default_db_url = "sqlite:///" + str(BASE_DIR / "db.sqlite3")
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        "NAME": config("NAME"),
-        "USER": config("USER"),
-        "PASSWORD": config("PASSWORD"),
-        "HOST": config("HOST"),
-        "PORT": "3306",
-        "OPTIONS": {
-            "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
-            "charset": "latin1",
-        },
-    }
+    'default': config(
+        'DATABASE_URL', default=default_db_url, cast=db_url
+    )
 }
+
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": config("NAME"),
+#         "USER": config("USER"),
+#         "PASSWORD": config("PASSWORD"),
+#         "HOST": config("HOST"),
+#         "PORT": "3306",
+#         "OPTIONS": {
+#             "init_command": "SET sql_mode='STRICT_TRANS_TABLES'",
+#             "charset": "latin1",
+#         },
+#     }
+# }
 
 AUTH_PASSWORD_VALIDATORS = [
     {
