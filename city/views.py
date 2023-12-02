@@ -37,13 +37,13 @@ class CityCreateView(CreateView):
     form_class = CityForm
     # success_url = "website/localization/localization_result.html"
 
-def form_valid(self, form):
-        context = self.get_context_data()
-        # form = context["form"]
-        # self.object = form.save()
-        # form.instance = self.object
-        # form.save()
-        return render(self.request, "localization/localization_result.html", context)
+    def form_valid(self, form):
+            context = self.get_context_data()
+            # form = context["form"]
+            # self.object = form.save()
+            # form.instance = self.object
+            # form.save()
+            return render(self.request, "localization/localization_result.html", context)
 
 
 class CityDetailsView(DetailView):

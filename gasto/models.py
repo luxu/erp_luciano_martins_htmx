@@ -65,7 +65,7 @@ class Gasto(Base):
     )
 
     def __str__(self):
-        return self.name
+        return f'{self.id}-{self.name}'
 
     class Meta:
         verbose_name = "Gasto"
@@ -91,4 +91,4 @@ class Parcelas(models.Model):
         db_table = 'website_parcelas'
 
     def __str__(self):
-        return f"Total de parcelas..: {self.parcelas}"
+        return f'SEGMENTO..:{self.gasto.name} - PARCELA..:{self.parcelas}'
