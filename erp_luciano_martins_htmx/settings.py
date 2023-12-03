@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 from decouple import Csv, config
 from dj_database_url import parse as db_url
@@ -109,9 +110,13 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
-STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR.joinpath('staticfiles_build')
-STATICFILES_DIRS = [ROOT_DIR / 'static']
+# STATIC_URL = 'static/'
+# STATIC_ROOT = BASE_DIR / 'staticfiles_build'
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
+STATIC_URL = "/staticfiles/"
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
+# STATICFILES_DIRS = BASE_DIR / 'staticfiles_build'
+# STATICFILES_DIRS = [ROOT_DIR / 'static']
 
 AUTH_USER_MODEL = "accounts.User"
 
