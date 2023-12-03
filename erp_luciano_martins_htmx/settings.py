@@ -110,13 +110,9 @@ TIME_ZONE = 'America/Sao_Paulo'
 USE_I18N = True
 USE_TZ = True
 
-# STATIC_URL = 'static/'
-# STATIC_ROOT = BASE_DIR / 'staticfiles_build'
 STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles_build", "static")
 STATIC_URL = "/staticfiles/"
 STATICFILES_DIRS = [os.path.join(BASE_DIR, "static")]
-# STATICFILES_DIRS = BASE_DIR / 'staticfiles_build'
-# STATICFILES_DIRS = [ROOT_DIR / 'static']
 
 AUTH_USER_MODEL = "accounts.User"
 
