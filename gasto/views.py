@@ -1,3 +1,6 @@
+import json
+
+from django.http import HttpResponse
 from django.shortcuts import render
 
 from django.shortcuts import render
@@ -6,6 +9,7 @@ from .models import Gasto
 from .forms import GastoForm
 
 from django.views.generic import (
+    FormView,
     ListView,
     CreateView,
     UpdateView,
@@ -71,3 +75,23 @@ class GastoEditView(UpdateView):
 class GastoDeleteView(DeleteView):
     model = Gasto
     success_url = "/gasto"
+
+
+class AutoCompleteView(FormView):
+    def get(self, request):
+        results = []
+        if q := request.GET.get("term", "").capitalize():
+            gastos = (
+                Gasto.objects.filter(name__icontains=q)
+                .values("name")
+                .order_by("name")
+                .distinct()
+            )
+        else:
+            gastos = Gasto.objects.all()
+        for gasto in gastos:
+            gasto_json = {"name": gasto["name"]}
+            results.append(gasto_json)
+        data = json.dumps(results)
+        mimetype = "application/json"
+        return HttpResponse(data, mimetype)

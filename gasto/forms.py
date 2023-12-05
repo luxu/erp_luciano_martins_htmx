@@ -3,6 +3,7 @@ from django.forms import ModelForm
 from .models import Gasto
 
 
+
 class GastoForm(ModelForm):
     class Meta:
         model = Gasto
@@ -16,3 +17,8 @@ class GastoForm(ModelForm):
             "segmento",
             "card_bank",
         ]
+
+class GastoFormAdmin(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(GastoFormAdmin, self).__init__(*args, **kwargs)
+        self.fields['name'].widget.attrs['class'] = 'mask-name'
