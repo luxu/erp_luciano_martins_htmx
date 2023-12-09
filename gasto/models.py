@@ -10,8 +10,8 @@ class Segmento(Base):
         return self.name
 
     class Meta:
-        verbose_name = "Segmento do Comercio"
-        verbose_name_plural = "Segmentos do Comercio"
+        verbose_name = "Segmento"
+        verbose_name_plural = "Segmentos"
         ordering = ["-name"]
         # db_table = 'website_segmento'
 
@@ -70,8 +70,24 @@ class Gasto(Base):
     class Meta:
         verbose_name = "Gasto"
         verbose_name_plural = "Gastos"
-        ordering = ["-id"]
+        ordering = ["-datagasto"]
         # db_table = 'website_gasto'
+
+    @property
+    def soma(self):
+        resultado = 0
+        try:
+            resultado = sum(
+                round(
+                    float(
+                        item.valor_parcela.replace(',', '.')
+                    ), 2
+                )
+                for item in self.parcelas_gasto.all()
+            )
+        except ValueError as err:
+            print(err)
+        return resultado
 
 
 class Parcelas(models.Model):
@@ -83,7 +99,7 @@ class Parcelas(models.Model):
     valor_parcela = models.CharField(
         "Valor da Parcela", max_length=100, blank=True, null=True
     )
-    data_parcela = models.DateField("Installment Date", blank=True, null=True)
+    data_parcela = models.DateField("Data Parcela", blank=True, null=True)
 
     class Meta:
         verbose_name = "Parcela do gasto"

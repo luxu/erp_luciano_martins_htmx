@@ -19,9 +19,6 @@ from django.views.generic import (
 
 class GastoListView(ListView):
     model = Gasto
-    # template_name = "localization/localization_list.html"
-    # template_name_suffix = '_list'
-    # context_object_name = "localidades"
     paginate_by = 10
 
     def get_context_data(self, **kwargs):
@@ -48,10 +45,6 @@ class GastoCreateView(CreateView):
 
 def form_valid(self, form):
         context = self.get_context_data()
-        # form = context["form"]
-        # self.object = form.save()
-        # form.instance = self.object
-        # form.save()
         return render(self.request, "localization/localization_result.html", context)
 
 
@@ -79,19 +72,12 @@ class GastoDeleteView(DeleteView):
 
 class AutoCompleteView(FormView):
     def get(self, request):
-        results = []
-        if q := request.GET.get("term", "").capitalize():
+        if q := request.GET.get("term").capitalize():
             gastos = (
                 Gasto.objects.filter(name__icontains=q)
                 .values("name")
                 .order_by("name")
                 .distinct()
             )
-        else:
-            gastos = Gasto.objects.all()
-        for gasto in gastos:
-            gasto_json = {"name": gasto["name"]}
-            results.append(gasto_json)
-        data = json.dumps(results)
-        mimetype = "application/json"
-        return HttpResponse(data, mimetype)
+            results = ",".join([str(gasto['name']) for gasto in gastos])
+            return HttpResponse(results)
