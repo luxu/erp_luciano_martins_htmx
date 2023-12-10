@@ -7,8 +7,10 @@ repos:
     rev: v1.2.3
     hooks:
     -   id: trailing-whitespace
+
 -   repo: https://github.com/asottile/pyupgrade
     rev: v1.25.0
     hooks:
     -   id: pyupgrade
         args: [--py36-plus]
+
