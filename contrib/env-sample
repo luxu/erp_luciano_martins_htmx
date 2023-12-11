@@ -1,0 +1,20 @@
+DEBUG=True
+SECRET_KEY=Change for a secret here
+ALLOWED_HOSTS=localhost, 127.0.0.1
+SENTRY_DSN=
+NAME=
+HOST=
+USER=
+PASSWORD=
+API_KEY_CHAT_GPT=
+OPENAI_API_KEY=
+ORG_ID=
+DATABASE_URL=postgres://postgres:postgres@localhost/postgres
+
+# Email Configuration
+EMAIL_BACKEND=django.core.mail.backends.console.EmailBackend
+EMAIL_HOST=localhost
+EMAIL_PORT=25
+EMAIL_USE_TLS=False
+EMAIL_HOST_USER=
+EMAIL_HOST_PASSWORD=
