@@ -3,6 +3,9 @@ import os
 from django import forms
 from django.forms.models import inlineformset_factory
 
+from . import models
+
+
 # from django.utils.translation import ugettext_lazy as _
 
 # from crispy_forms.bootstrap import FormActions, InlineField
@@ -17,8 +20,6 @@ from django.forms.models import inlineformset_factory
 #     Row,
 #     Submit,
 # )
-
-from . import models
 
 
 class MyDateInput(forms.DateInput):

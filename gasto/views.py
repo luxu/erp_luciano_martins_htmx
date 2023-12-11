@@ -1,12 +1,12 @@
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import (
+    CreateView,
+    DeleteView,
+    DetailView,
     FormView,
     ListView,
-    CreateView,
     UpdateView,
-    DetailView,
-    DeleteView,
 )
 
 from .forms import GastoForm

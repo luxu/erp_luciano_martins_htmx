@@ -1,13 +1,14 @@
 from django.contrib import admin
 
-# from daterange_filter.filter import DateRangeFilter
-# from import_export import resources
-# from import_export.admin import ImportExportModelAdmin
-
 from . import models
 from .forms import PecasForm
 from .forms_gasto_segmento import GastoForm
 from .models_gasto_segmento import Gasto, Parcelas, Segmento
+
+
+# from daterange_filter.filter import DateRangeFilter
+# from import_export import resources
+# from import_export.admin import ImportExportModelAdmin
 
 
 class ItensPecasInline(admin.TabularInline):

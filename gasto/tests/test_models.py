@@ -16,6 +16,6 @@ def test_gasto(gasto):
 def test_parcelas(parcela):
     assert parcela.parcelas == 1
     assert parcela.valor_parcela == 10.01
-    assert parcela.data_parcela == datetime.now()
+    assert parcela.data_parcela.date() == datetime.now().date()
     assert parcela.numero_parcela == 1
     assert parcela.gasto.name == "Supermercado Avenida"

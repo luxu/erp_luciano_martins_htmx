@@ -2,7 +2,7 @@ from datetime import datetime
 
 import pytest
 
-from gasto.models import Segmento, Cardbank, Gasto, Parcelas
+from gasto.models import Cardbank, Gasto, Parcelas, Segmento
 
 
 @pytest.fixture

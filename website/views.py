@@ -11,6 +11,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from accounts import constants
+
 from . import forms, models
 
 # from .admin import ComercioResource

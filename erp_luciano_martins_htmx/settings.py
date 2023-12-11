@@ -1,7 +1,9 @@
 import os
 from pathlib import Path
+
 from decouple import Csv, config
 from dj_database_url import parse as db_url
+
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = Path(__file__).resolve().parent

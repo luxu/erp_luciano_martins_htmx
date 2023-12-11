@@ -2,6 +2,7 @@ from django.urls import include, path
 
 from . import views
 
+
 # from . import views_gasto_segmento as v_gastos
 
 app_name = "website"

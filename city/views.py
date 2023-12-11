@@ -1,15 +1,14 @@
 from django.shortcuts import render
-
-from .models import City
-from .forms import CityForm
-
 from django.views.generic import (
-    ListView,
     CreateView,
-    UpdateView,
-    DetailView,
     DeleteView,
+    DetailView,
+    ListView,
+    UpdateView,
 )
+
+from .forms import CityForm
+from .models import City
 
 
 class CityListView(ListView):
