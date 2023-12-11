@@ -1,21 +1,17 @@
-import json
-
 from django.http import HttpResponse
 from django.shortcuts import render
-
-from django.shortcuts import render
-
-from .models import Gasto
-from .forms import GastoForm
-
 from django.views.generic import (
     FormView,
     ListView,
     CreateView,
     UpdateView,
     DetailView,
-    DeleteView
+    DeleteView,
 )
+
+from .forms import GastoForm
+from .models import Gasto
+
 
 class GastoListView(ListView):
     model = Gasto
@@ -29,11 +25,9 @@ class GastoListView(ListView):
 
 def GastoSearchView(request):
     template_name = "gasto/gasto_table.html"
-    query = request.POST.get('q')
+    query = request.POST.get("q")
     cities = Gasto.objects.filter(description__icontains=query)
-    context = {
-        'object_list': cities
-    }
+    context = {"object_list": cities}
     return render(request, template_name, context)
 
 
@@ -43,14 +37,16 @@ class GastoCreateView(CreateView):
     form_class = GastoForm
     # success_url = "website/localization/localization_result.html"
 
+
 def form_valid(self, form):
-        context = self.get_context_data()
-        return render(self.request, "localization/localization_result.html", context)
+    context = self.get_context_data()
+    return render(self.request, "localization/localization_result.html", context)
 
 
 class GastoDetailsView(DetailView):
     model = Gasto
     # template_name = "localization/gasto_detail.html"
+
 
 class GastoEditView(UpdateView):
     model = Gasto
@@ -79,5 +75,5 @@ class AutoCompleteView(FormView):
                 .order_by("name")
                 .distinct()
             )
-            results = ",".join([str(gasto['name']) for gasto in gastos])
+            results = ",".join([str(gasto["name"]) for gasto in gastos])
             return HttpResponse(results)

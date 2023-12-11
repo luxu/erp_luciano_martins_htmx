@@ -1,5 +1,5 @@
 [flake8]
 max-line-length=120
-exclude = .git,__pycache__,.venv,*vendor*,*migrations*,vendor
+exclude = .git,__pycache__,.venv,*vendor*,*migrations*,vendor,website/*,staticfiles_build
 extend-ignore = E203
 max-complexity = 10

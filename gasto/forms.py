@@ -20,8 +20,9 @@ class GastoForm(ModelForm):
 
 class GastoFormAdmin(ModelForm):
     def __init__(self, *args, **kwargs):
-        super(GastoFormAdmin, self).__init__(*args, **kwargs)
-        self.fields['name'].widget.attrs['class'] = 'mask-name'
+        super().__init__(*args, **kwargs)
+        self.fields["name"].widget.attrs["class"] = "mask-name"
+
 
 class SegmentoForm(ModelForm):
     class Meta:

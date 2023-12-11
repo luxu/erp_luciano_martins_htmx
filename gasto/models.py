@@ -3,6 +3,7 @@ from django.db import models
 from accounts import constants
 from accounts.models import Base
 
+
 class Segmento(Base):
     name = models.CharField("Tipo de comércio", max_length=100)
 
@@ -13,8 +14,6 @@ class Segmento(Base):
         verbose_name = "Segmento"
         verbose_name_plural = "Segmentos"
         ordering = ["-name"]
-        # db_table = 'website_segmento'
-
 
 
 class Cardbank(Base):
@@ -33,6 +32,7 @@ class Cardbank(Base):
 def cardbank_default():
     return Cardbank.objects.get(id=1).id
 
+
 class Gasto(Base):
     name = models.CharField("nome", max_length=100)
     more_infos = models.CharField(
@@ -42,9 +42,7 @@ class Gasto(Base):
         blank=True,
     )
     datagasto = models.DateField("Data do Gasto")
-    total = models.CharField(
-        "Valor Total", max_length=100, null=True, blank=True
-    )
+    total = models.CharField("Valor Total", max_length=100, null=True, blank=True)
     description_on_invoice = models.CharField(
         "Descrição na fatura", max_length=20, null=True, blank=True
     )
@@ -65,24 +63,19 @@ class Gasto(Base):
     )
 
     def __str__(self):
-        return f'{self.id}-{self.name}'
+        return f"{self.id}-{self.name}"
 
     class Meta:
         verbose_name = "Gasto"
         verbose_name_plural = "Gastos"
         ordering = ["-datagasto"]
-        # db_table = 'website_gasto'
 
     @property
     def soma(self):
         resultado = 0
         try:
             resultado = sum(
-                round(
-                    float(
-                        item.valor_parcela.replace(',', '.')
-                    ), 2
-                )
+                round(float(item.valor_parcela.replace(",", ".")), 2)
                 for item in self.parcelas_gasto.all()
             )
         except ValueError as err:
@@ -104,7 +97,6 @@ class Parcelas(models.Model):
     class Meta:
         verbose_name = "Parcela do gasto"
         verbose_name_plural = "Parcelas dos gasto"
-        # db_table = 'website_parcelas'
 
     def __str__(self):
-        return f'SEGMENTO..:{self.gasto.name} - PARCELA..:{self.parcelas}'
+        return f"SEGMENTO..:{self.gasto.name} - PARCELA..:{self.parcelas}"

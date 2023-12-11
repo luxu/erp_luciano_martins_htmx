@@ -1,27 +1,29 @@
-import os
 import re
-import tempfile
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import EmptyPage, PageNotAnInteger, Paginator
 from django.db.models import Q
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, render
-from django.urls import reverse, reverse_lazy
+from django.urls import reverse_lazy
+
 # from django.utils.encoding import force_text
 from django.views import generic
+
+from accounts import constants
+from . import forms, models
+
+# from .admin import ComercioResource
+from .filters import PecasFilter
+
 
 # import tablib
 # from import_export.formats import base_formats
 # from import_export.forms import ConfirmImportForm
-
-from accounts import constants
 # from scripts import chatgpt
 # from vendor.cruds_adminlte.crud import CRUDView
 
-from . import forms, models
-# from .admin import ComercioResource
-from .filters import PecasFilter
+
 # from .resources import PecasResource
 
 
@@ -61,9 +63,7 @@ class PecasListView(LoginRequiredMixin, generic.ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context, ordering_field = self.resolve_order_field(context)
-        pecas_filter = PecasFilter(
-            self.request.GET, queryset=self.get_queryset()
-        )
+        pecas_filter = PecasFilter(self.request.GET, queryset=self.get_queryset())
         object_list = (
             pecas_filter.qs.order_by(ordering_field)
             if ordering_field
@@ -143,9 +143,7 @@ class PecasEditView(generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context["forms"] = forms.PecasForm(
-                self.request.POST, instance=self.object
-            )
+            context["forms"] = forms.PecasForm(self.request.POST, instance=self.object)
             context["formset"] = forms.ItemPecasFormSet(
                 self.request.POST, instance=self.object
             )
@@ -275,8 +273,7 @@ class RabbiitListView(LoginRequiredMixin, generic.TemplateView):
         query = self.request.GET.get("q")
         if query:
             list_pecas = list_pecas.filter(
-                Q(comercio__description__icontains=query)
-                | Q(data__icontains=query)
+                Q(comercio__description__icontains=query) | Q(data__icontains=query)
             ).distinct()
         paginator = Paginator(list_pecas, self.paginate_by)
 
@@ -289,9 +286,7 @@ class RabbiitListView(LoginRequiredMixin, generic.TemplateView):
         except EmptyPage:
             object_list = paginator.page(paginator.num_pages)
         context["object_list"] = object_list
-        context[
-            "model_verbose_name_plural"
-        ] = self.model._meta.verbose_name_plural
+        context["model_verbose_name_plural"] = self.model._meta.verbose_name_plural
         return context
 
 
@@ -337,24 +332,24 @@ class RabbiitListView(LoginRequiredMixin, generic.TemplateView):
 #             context["forms"] = forms.RabbiitForm(instance=self.object)
 #         return context
 
-    # def form_valid(self, form):
-    #     context = self.get_context_data()
-    #     form = context['forms']
-    #     formset = context['formset']
-    #     if form.is_valid():
-    #         sizeIensPecas = len(formset.cleaned_data)
-    #         try:
-    #             form.cleaned_data['total'] = str(total)
-    #         except Exception as err:
-    #             form.cleaned_data['total'] = 0
-    #             print(f'Err.: {err}')
-    #         # form = form.save(commit=False)
-    #         # form.total = str(total)
-    #         form.save()
-    #         formset.save()
-    #     return redirect('website_horatrabalhada_list')
-    #     else:
-    #         return self.render_to_response(self.get_context_data(form=form))
+# def form_valid(self, form):
+#     context = self.get_context_data()
+#     form = context['forms']
+#     formset = context['formset']
+#     if form.is_valid():
+#         sizeIensPecas = len(formset.cleaned_data)
+#         try:
+#             form.cleaned_data['total'] = str(total)
+#         except Exception as err:
+#             form.cleaned_data['total'] = 0
+#             print(f'Err.: {err}')
+#         # form = form.save(commit=False)
+#         # form.total = str(total)
+#         form.save()
+#         formset.save()
+#     return redirect('website_horatrabalhada_list')
+#     else:
+#         return self.render_to_response(self.get_context_data(form=form))
 
 
 class RabbiitDeleteView(generic.DeleteView):
@@ -395,8 +390,7 @@ class HoraTrabalhadaListView(generic.TemplateView):
         query = self.request.GET.get("q")
         if query:
             list_pecas = list_pecas.filter(
-                Q(comercio__description__icontains=query)
-                | Q(data__icontains=query)
+                Q(comercio__description__icontains=query) | Q(data__icontains=query)
             ).distinct()
         paginator = Paginator(list_pecas, self.paginate_by)
 
@@ -418,9 +412,7 @@ class HoraTrabalhadaCreateView(generic.CreateView):
     form_class = forms.HoraTrabalhadaForm
 
     def get_context_data(self, **kwargs):
-        context = super().get_context_data(
-            **kwargs
-        )
+        context = super().get_context_data(**kwargs)
         if self.request.POST:
             context["forms"] = forms.HoraTrabalhadaForm(self.request.POST)
         else:
@@ -512,7 +504,9 @@ class HoraTrabalhadaDeleteView(generic.DeleteView):
 
 class CityListView(generic.ListView):
     model = models.City
-    template_name = "website/../localization/templates/localization/localization_list.html"
+    template_name = (
+        "website/../localization/templates/localization/localization_list.html"
+    )
     context_object_name = "localidades"
     paginate_by = 10
 
@@ -532,38 +526,49 @@ class CityListView(generic.ListView):
             filters |= Q(description__icontains=search)
         return queryset.filter(filters)
 
+
 def CitySearchView(request):
     template_name = "website/localization/localization_table.html"
-    query = request.POST.get('q')
+    query = request.POST.get("q")
     cities = models.City.objects.filter(description__icontains=query)
-    context = {
-        'object_list': cities
-    }
+    context = {"object_list": cities}
     return render(request, template_name, context)
 
 
 class CityCreateView(generic.CreateView):
     model = models.City
-    template_name = "website/../localization/templates/localization/localization_form.html"
+    template_name = (
+        "website/../localization/templates/localization/localization_form.html"
+    )
     form_class = forms.CityForm
     # success_url = "website/localization/localization_result.html"
 
+
 def form_valid(self, form):
-        context = self.get_context_data()
-        # form = context["form"]
-        # self.object = form.save()
-        # form.instance = self.object
-        # form.save()
-        return render(self.request, "website/../localization/templates/localization/localization_result.html", context)
+    context = self.get_context_data()
+    # form = context["form"]
+    # self.object = form.save()
+    # form.instance = self.object
+    # form.save()
+    return render(
+        self.request,
+        "website/../localization/templates/localization/localization_result.html",
+        context,
+    )
 
 
 class CityDetailsView(generic.DetailView):
     model = models.City
-    template_name = "website/../localization/templates/localization/localization_detail.html"
+    template_name = (
+        "website/../localization/templates/localization/localization_detail.html"
+    )
+
 
 class CityEditView(generic.UpdateView):
     model = models.City
-    template_name = "website/../localization/templates/localization/localization_update_form.html"
+    template_name = (
+        "website/../localization/templates/localization/localization_update_form.html"
+    )
     form_class = forms.CityForm
 
     def form_valid(self, form):
@@ -572,7 +577,11 @@ class CityEditView(generic.UpdateView):
         self.object = form.save()
         forms.instance = self.object
         forms.save()
-        return render(self.request, "website/../localization/templates/localization/localization_result.html", context)
+        return render(
+            self.request,
+            "website/../localization/templates/localization/localization_result.html",
+            context,
+        )
 
 
 class CityDeleteView(generic.DeleteView):
@@ -686,7 +695,7 @@ class EventsListView(LoginRequiredMixin, generic.ListView):
             if RE_INT.match(search):
                 filters |= Q(id=search)
             filters |= Q(description__icontains=search)
-        return queryset.filter(filters).order_by('-event_date')
+        return queryset.filter(filters).order_by("-event_date")
 
 
 # class EventsCreateView(generic.CreateView):

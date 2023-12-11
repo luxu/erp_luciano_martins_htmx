@@ -7,9 +7,7 @@ from accounts.models import Base
 
 
 class HoraTrabalhada(Base):
-    price = models.CharField(
-        verbose_name="Ganho/hora", max_length=100, default=0
-    )
+    price = models.CharField(verbose_name="Ganho/hora", max_length=100, default=0)
     content = models.TextField(null=True)
 
     def __str__(self):
@@ -25,15 +23,9 @@ class HoraTrabalhada(Base):
 
 class Rabbiit(Base):
     description = models.CharField(verbose_name="Descrição", max_length=100)
-    time_total = models.TimeField(
-        verbose_name="Total de horas", blank=True, null=True
-    )
-    time_start = models.TimeField(
-        verbose_name="Hora Inicial", blank=True, null=True
-    )
-    time_end = models.TimeField(
-        verbose_name="Hora Final", blank=True, null=True
-    )
+    time_total = models.TimeField(verbose_name="Total de horas", blank=True, null=True)
+    time_start = models.TimeField(verbose_name="Hora Inicial", blank=True, null=True)
+    time_end = models.TimeField(verbose_name="Hora Final", blank=True, null=True)
     rate_hour = models.ForeignKey(
         HoraTrabalhada,
         verbose_name="Ganho/hora",
@@ -63,9 +55,7 @@ class Rabbiit(Base):
 
 
 class City(Base):
-    description = models.CharField(
-        verbose_name=_("Description"), max_length=100
-    )
+    description = models.CharField(verbose_name=_("Description"), max_length=100)
 
     def __str__(self):
         return self.description
@@ -131,15 +121,11 @@ class Pecas(Base):
 
 class Itenspecas(models.Model):
     description = models.CharField(verbose_name="Descrição", max_length=100)
-    pecas = models.ForeignKey(
-        Pecas, verbose_name="Peças", on_delete=models.PROTECT
-    )
+    pecas = models.ForeignKey(Pecas, verbose_name="Peças", on_delete=models.PROTECT)
     price = models.CharField(
         verbose_name="Preço", blank=True, null=True, max_length=100
     )
-    quantity = models.IntegerField(
-        verbose_name="Quantidade Comprada", default=1
-    )
+    quantity = models.IntegerField(verbose_name="Quantidade Comprada", default=1)
     subtotal = models.CharField(
         verbose_name="Sub-Total", blank=True, null=True, max_length=100
     )
@@ -154,13 +140,8 @@ class Itenspecas(models.Model):
 
 
 class Events(Base):
-    description = models.CharField(
-        verbose_name="Descrição",
-        max_length=250
-    )
-    event_date = models.DateField(
-        verbose_name="Data do Acontecimento"
-    )
+    description = models.CharField(verbose_name="Descrição", max_length=250)
+    event_date = models.DateField(verbose_name="Data do Acontecimento")
 
     def __str__(self):
         return self.description
@@ -182,9 +163,7 @@ class Events(Base):
 
 class Vivo(Base):
     velocity = models.CharField(verbose_name=_("Description"), max_length=250)
-    event_date = models.DateField(
-        verbose_name=_("Data Evento"), blank=True, null=True
-    )
+    event_date = models.DateField(verbose_name=_("Data Evento"), blank=True, null=True)
     internet_used_in_percentagem = models.CharField(
         verbose_name="Internet Utilizada (%)",
         max_length=10,
@@ -256,9 +235,7 @@ class Planilha(models.Model):
 
 class Consultancy(Base):
     name = models.CharField(verbose_name="Nome", max_length=50, unique=True)
-    quantity_of_company = models.IntegerField(
-        "Quantidade de Empresas", default=0
-    )
+    quantity_of_company = models.IntegerField("Quantidade de Empresas", default=0)
 
     def __str__(self):
         return f"{self.name}"
@@ -312,9 +289,7 @@ class Emprego(Base):
     )
     entrade_date = models.DateField(verbose_name="Data de Entrada")
     job = models.CharField(verbose_name="Vaga", max_length=50, null=True)
-    requisite = models.TextField(
-        verbose_name="Requisitos", null=True, blank=True
-    )
+    requisite = models.TextField(verbose_name="Requisitos", null=True, blank=True)
     skills = models.ManyToManyField(Skill, blank=True)
     feedback = models.CharField(
         max_length=100, help_text="ex. Outro Candidato", null=True, blank=True
@@ -334,9 +309,7 @@ class Emprego(Base):
         choices=constants.TYPE_VACANCY_FOUND,
         default=constants.OUTRO,
     )
-    count_day_contact = models.IntegerField(
-        verbose_name="Dias passados", default=0
-    )
+    count_day_contact = models.IntegerField(verbose_name="Dias passados", default=0)
 
     def __str__(self):
         return f"Vaga: {self.job} na empresa: {self.company.name}"

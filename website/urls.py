@@ -1,9 +1,10 @@
 from django.urls import include, path
 
 from . import views
+
 # from . import views_gasto_segmento as v_gastos
 
-app_name = 'website'
+app_name = "website"
 
 # pecas_crud = [
 #     path(
@@ -115,11 +116,7 @@ city_crud = [
         views.CityCreateView.as_view(),
         name="localization_create",
     ),
-    path(
-        "<int:pk>/",
-        views.CityDetailsView.as_view(),
-        name='localization_detail'
-    ),
+    path("<int:pk>/", views.CityDetailsView.as_view(), name="localization_detail"),
     path(
         "<int:pk>/edit/",
         views.CityEditView.as_view(),
@@ -129,7 +126,7 @@ city_crud = [
         "<int:pk>/delete/",
         views.CityDeleteView.as_view(),
         name="localization_delete",
-    )
+    ),
 ]
 
 # comercio_crud = [

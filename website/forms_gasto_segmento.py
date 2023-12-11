@@ -1,8 +1,11 @@
 from django import forms
 from django.forms.models import inlineformset_factory
+
 # from django.utils.translation import ugettext_lazy as _
 #
 from .models_gasto_segmento import Cardbank, Gasto, Parcelas, Segmento
+
+
 #
 #
 # class MyDateInput(forms.DateInput):
@@ -17,12 +20,11 @@ from .models_gasto_segmento import Cardbank, Gasto, Parcelas, Segmento
 #
 #
 class GastoForm(forms.ModelForm):
-#
-#     datagasto = forms.DateField(localize=True, widget=MyDateInput())
-#
     class Meta:
         model = Gasto
-        fields = '__all__'
+        fields = "__all__"
+
+
 #         widgets = {
 #             "datagasto": DatePickerWidget(
 #                 attrs={"format": "dd/mm/yyyy", "icon": "fa-calendar"}

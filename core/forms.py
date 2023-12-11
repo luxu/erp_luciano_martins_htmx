@@ -1,5 +1,6 @@
 from django import forms
-from core.models import City
+from city.models import City
+
 
 class CityForm(forms.ModelForm):
     class Meta:

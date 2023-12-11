@@ -98,9 +98,7 @@ class GastosEditView(generic.UpdateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.POST:
-            context["forms"] = form.GastoForm(
-                self.request.POST, instance=self.object
-            )
+            context["forms"] = form.GastoForm(self.request.POST, instance=self.object)
             context["formset"] = form.ParcelasFormSet(
                 self.request.POST, instance=self.object
             )
@@ -268,9 +266,7 @@ def _extracted_from_GastoPorParcelasView_4(request):
         "data_parcela",
     )
     qs = qs.order_by("parcelas_gasto__data_parcela")
-    vlr_total = sum(
-        float(change_comma_by_dot(valor["valor_parcela"])) for valor in qs
-    )
+    vlr_total = sum(float(change_comma_by_dot(valor["valor_parcela"])) for valor in qs)
 
     return {
         "data": qs,
@@ -323,9 +319,7 @@ def _extracted_from_GastoPorSegmentoView_4(request):
     qs = qs.values("id", "name", "datagasto", "data_parcela", "valor_parcela")
     qs = qs.order_by("-datagasto")
     # 3.080.88
-    vlr_total = sum(
-        float(valor["valor_parcela"].replace(",", ".")) for valor in qs
-    )
+    vlr_total = sum(float(valor["valor_parcela"].replace(",", ".")) for valor in qs)
 
     segmentos = model.Segmento.objects.all().order_by("id")
     return {
@@ -376,7 +370,9 @@ def _extracted_from_SubdividirSegmentosView_5(request, segmentos):
             parcelas_gasto__data_parcela__range=[dtInicial, dtFinal],
         )
         if len(gastos_por_segmento) > 0:
-            dict_segmentos['total'] = sum([float(gastos.total) for gastos in gastos_por_segmento])
+            dict_segmentos["total"] = sum(
+                [float(gastos.total) for gastos in gastos_por_segmento]
+            )
             dict_segmentos[segmento["name"]] = len(gastos_por_segmento)
             list_segmentos.append(dict_segmentos)
     nv_dict = {
@@ -396,7 +392,6 @@ def _extracted_from_SubdividirSegmentosView_5(request, segmentos):
 def DetailsSegmentoView(request, segmento_name):
     template_name = "website/gasto/detailsSegmento.html"
     context = {"segmento_name": segmento_name}
-    # sum([float(r['total']) for r in Gasto.objects.filter(segmento__id=s.first().id, parcelas_gasto__data_parcela__range=[dtInicial, dtFinal]).values('total')])
     return render(request, template_name, context)
 
 

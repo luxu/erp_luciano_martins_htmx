@@ -1,28 +1,19 @@
-from django.db import models
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 from accounts import constants
 
 
 class Base(models.Model):
     """Base parent model for all the models"""
-    created_at = models.DateTimeField(
-        "Criado em",
-        auto_now_add=True,
-        null=True
-    )
-    modified_at = models.DateTimeField(
-        "Atualizado em",
-        auto_now=True,
-        null=True
-    )
-    status = models.BooleanField(
-        choices=constants.STATUS,
-        default=constants.ATIVO
-    )
+
+    created_at = models.DateTimeField("Criado em", auto_now_add=True, null=True)
+    modified_at = models.DateTimeField("Atualizado em", auto_now=True, null=True)
+    status = models.BooleanField(choices=constants.STATUS, default=constants.ATIVO)
 
     class Meta:
         abstract = True
+
 
 class User(AbstractUser):
     username = models.CharField(
@@ -47,4 +38,3 @@ class User(AbstractUser):
         verbose_name = "Usuário"
         verbose_name_plural = "Usuários"
         db_table = "accounts_user"
-

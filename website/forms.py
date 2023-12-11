@@ -2,6 +2,7 @@ import os
 
 from django import forms
 from django.forms.models import inlineformset_factory
+
 # from django.utils.translation import ugettext_lazy as _
 
 # from crispy_forms.bootstrap import FormActions, InlineField
@@ -253,6 +254,8 @@ class CityForm(forms.ModelForm):
     class Meta:
         model = models.City
         fields = ["description"]
+
+
 #
 #     def __init__(self, *args, **kwargs):
 #         super().__init__(*args, **kwargs)

@@ -9,9 +9,11 @@ from gasto.models import Segmento, Cardbank, Gasto, Parcelas
 def segmento(db):
     return Segmento.objects.create(name="Supermercados")
 
+
 @pytest.fixture
 def cardbank(db):
-    return Cardbank.objects.create(name='BB')
+    return Cardbank.objects.create(name="BB")
+
 
 @pytest.fixture
 def gasto(segmento, cardbank):
@@ -22,10 +24,9 @@ def gasto(segmento, cardbank):
         card_bank=cardbank,
     )
 
+
 @pytest.fixture()
 def parcela(gasto):
     return Parcelas.objects.create(
-        gasto=gasto,
-        valor_parcela=10.01,
-        data_parcela=datetime.now()
+        gasto=gasto, valor_parcela=10.01, data_parcela=datetime.now()
     )

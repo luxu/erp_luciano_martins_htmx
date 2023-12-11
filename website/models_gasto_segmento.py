@@ -41,9 +41,7 @@ class Gasto(Base):
         blank=True,
     )
     datagasto = models.DateField("Data do Gasto")
-    total = models.CharField(
-        "Valor Total", max_length=100, null=True, blank=True
-    )
+    total = models.CharField("Valor Total", max_length=100, null=True, blank=True)
     description_on_invoice = models.CharField(
         "Descrição na fatura", max_length=20, null=True, blank=True
     )
