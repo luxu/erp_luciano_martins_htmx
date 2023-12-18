@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     "city",
     "core",
     "gasto",
+    "events",
 ]
 
 MIDDLEWARE = [

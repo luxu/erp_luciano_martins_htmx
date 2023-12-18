@@ -1,0 +1,33 @@
+<div class="modal-header">
+  <h4 class="modal-title" id="detailModalLabel">{{ object }}</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+</div>
+<div class="modal-body">
+  <p>Descrição
+    <span class="float-right">{{ object.name }}</span>
+  </p>
+  <p>Data
+    <span class="float-right">{{ object.datagasto }}</span>
+  </p>
+  <p>Total
+    <span class="float-right">{{ object.total }}</span>
+  </p>
+  <p>Fatura
+    <span class="float-right">{{ object.description_on_invoice }}</span>
+  </p>
+  <p>Pagamento
+    <span class="float-right">{{ object.opcoes_cartao }}</span>
+  </p>
+  <p>Segmento
+    <span class="float-right">{{ object.segmento }}</span>
+  </p>
+  <p>Cartão
+    <span class="float-right">{{ object.card_bank }}</span>
+  </p>
+  <p>Cartão
+    <span class="float-right">{{ object.card_bank }}</span>
+  </p>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+</div>

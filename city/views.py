@@ -31,7 +31,7 @@ def CitySearchView(request):
 
 class CityCreateView(CreateView):
     model = City
-    template_name = "localization/localization_form.html"
+    # template_name = "localization/localization_form.html"
     form_class = CityForm
 
     # success_url = "website/localization/localization_result.html"
