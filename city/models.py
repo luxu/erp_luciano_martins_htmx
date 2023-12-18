@@ -16,4 +16,3 @@ class City(Base):
         verbose_name = "Localidade"
         verbose_name_plural = "Localidades"
         ordering = ["-id"]
-        db_table = "website_city"

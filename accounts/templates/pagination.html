@@ -1,0 +1,21 @@
+{% load accounts_tags %}
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">
+        {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="page-link"
+                    href="{% url 'event_list' %}?page={{ page_obj.previous_page_number }}"
+                    hx-get="{% url 'event_list' %}{% query_string page=page_obj.previous_page_number %}"
+                >Anterior</a>
+            </li>
+        {% endif %}
+        {% for page in page_obj.paginator.page_range %}
+            <li class="page-item"><a class="page-link" href="{% url 'event_list' %}?page={{ page }}">{{ page }}</a></li>
+        {% endfor %}
+        {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="{% url 'event_list' %}?page={{ page_obj.next_page_number }}">Próximo</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>

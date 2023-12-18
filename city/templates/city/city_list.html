@@ -10,7 +10,7 @@
       <a href="" class="btn btn-primary"
         data-toggle="modal"
         data-target="#addModal"
-        hx-get="{ url 'website:city_create' %}"
+        hx-get="{% url 'city_create' %}"
         hx-target="#addContent"
         hx-swap="innerHTML">
         Adicionar

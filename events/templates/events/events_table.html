@@ -1,0 +1,23 @@
+<div id="events-datatable" class="col-12">
+    <table class="table table-condensed table-striped table-bordered table-hover" id="table-form">
+        <thead>
+            <td>ID</td>
+            <td>Descrição</td>
+            <td>Data</td>
+            <td>Opções</td>
+        </thead>
+        <tbody>
+            {% for event in object_list %}
+                <tr>
+                    <td>{{ event.id }}</td>
+                    <td>{{ event }}</td>
+                    <td>{{ event.event_date }}</td>
+                    <td>
+                        <a href="">Editar</a>
+                        <a href="">Deletar</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
