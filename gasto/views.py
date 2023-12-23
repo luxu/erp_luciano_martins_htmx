@@ -1,3 +1,7 @@
+import re
+
+import fitz
+from decouple import config
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import (
@@ -8,6 +12,7 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
+from pyitau import Itau
 
 from .forms import GastoForm
 from .models import Gasto
@@ -77,3 +82,120 @@ class AutoCompleteView(FormView):
             )
             results = ",".join([str(gasto["name"]) for gasto in gastos])
             return HttpResponse(results)
+
+
+def read_pdf(request):
+    template_name = "gasto/pdf.html"
+    if request.method == "POST":
+        pdf_file = request.FILES["pdf_file"]
+        pdf_document = fitz.open(stream=pdf_file.read(), filetype="pdf")
+        texto = ""
+        for pagina in pdf_document:
+            texto += pagina.get_text()
+        tabelas = texto.split("Data")[1:]
+        padrao = r"\b\d{2}/\d{2}\b"
+        cont = 1
+        table_lancamentos = None
+        lista_contas_parceladas = []
+        context = {}
+        list_line = []
+        for page in tabelas:
+            texts = page.split("\n")
+            line = ""
+            for text in texts:
+                if "Lançamentos em processamento" in text:
+                    table_lancamentos = tabelas[-1]
+                    break
+                else:
+                    if re.search(padrao, text):
+                        line = text
+                    if "," in text:
+                        line += text
+                        if "PARC" in line:
+                            lista_contas_parceladas.append(line)
+                        else:
+                            if re.search(padrao, line):
+                                list_line.append(line)
+                                cont += 1
+                                line = ""
+            if table_lancamentos:
+                break
+        context["list_line"] = list_line
+        if lista_contas_parceladas:
+            list_parcela = []
+            for parcela in lista_contas_parceladas:
+                list_parcela.append(parcela)
+            context["lista_contas_parceladas"] = list_parcela
+        if table_lancamentos:
+            texts = table_lancamentos.split("\n")
+            line = ""
+            for text in texts[3:]:
+                if re.search(padrao, text):
+                    line = text
+                else:
+                    line += text
+                if "," in text:
+                    line = ""
+        return render(request, template_name, context)
+    return render(request, template_name)
+
+
+def record_pdf(request):
+    template_name = "gasto/record_pdf.html"
+    dados_selecionados = request.POST.getlist("selecionar")
+    lista_dados = []
+    for item in dados_selecionados:
+        dados = item.strip().split(" ")
+        data = dados[0]
+        estabelecimento = " ".join(dados[1:-2])
+        # gasto = Gasto.objects.filter(name__icontains=estabelecimento)
+        for info in estabelecimento.split(" "):
+            gasto = Gasto.objects.filter(name__icontains=info)
+            if gasto:
+                estabelecimento = gasto.first().name
+                break
+        preco = dados[-1]
+        dict_dados = {"data": data, "estabelecimento": estabelecimento, "preco": preco}
+        lista_dados.append(dict_dados)
+    context = {"lista_dados": lista_dados}
+    return render(request, template_name, context)
+
+
+def read_bank_itau():
+    itau = Itau(
+        agency="4533",
+        account="27693",
+        account_digit="9",
+        password=config("ITAU_PASSWORD"),
+    )
+    itau.authenticate()
+    # fatura_passada = itau.get_credit_card_invoice()["object"]["faturas"][0][
+    #     "lancamentosNacionais"
+    # ]["titularidades"][0]["lancamentos"]
+    fatura_atual = itau.get_credit_card_invoice()["object"]["faturas"][1][
+        "lancamentosNacionais"
+    ]["titularidades"][0]["lancamentos"]
+    line = "-" * 80
+    for index, item in enumerate(fatura_atual):
+        # for index, item in enumerate(fatura_passada):
+        data = item["data"]
+        descricao = item["descricao"]
+        valor = item["valor"]
+        print(
+            f"{line}\nDATA..:{data}\nDESCRIÇÃO..{descricao}\nVALOR..{valor}\n{index + 1}"
+        )
+
+
+def read_itau_txt(request):
+    template_name = "gasto/itau_txt.html"
+    fatura_passada = []
+    fatura_atual = []
+    if request.method == "POST":
+        itau_file = request.FILES["itau_file"]
+        resultado = itau_file.read().decode("utf-8").split("\n")
+        for info in resultado:
+            print(info)
+        context = {"fatura_passada": fatura_passada, "fatura_atual": fatura_atual}
+        return render(request, template_name, context)
+
+    return render(request, template_name)

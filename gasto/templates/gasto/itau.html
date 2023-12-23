@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="{% url 'record_pdf' %}" method="post">
+        {% csrf_token %}
+        <div>
+            <span>Mês Atual</span>
+            <ul>
+                {% for info in fatura_atual %}
+                    <li>{{ info }}</li>
+                {% endfor %}
+            </ul>
+            <span>Mês Passado</span>
+            <ul>
+                {% for info in fatura_passada %}
+                    <li>{{ info }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </form>
+{% endblock content %}

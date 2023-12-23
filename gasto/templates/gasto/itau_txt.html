@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="{% url 'read_itau_txt' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <input type="file" name="itau_file">
+        <button type="submit">Enviar</button>
+    </form>
+    <div>
+        <span>Mês Atual</span>
+        <ul>
+            {% for info in fatura_atual %}
+                <li>{{ info }}</li>
+            {% endfor %}
+        </ul>
+        <span>Mês Passado</span>
+        <ul>
+            {% for info in fatura_passada %}
+                <li>{{ info }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+{% endblock content %}

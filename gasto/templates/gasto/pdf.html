@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form action="{% url 'read_pdf' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-control">
+            <label for="">Pdf</label>
+            <input type="file" name="pdf_file">
+            <button class="btn btn-primary" type="submit">Enviar</button>
+        </div>
+    </form>
+    <form action="{% url 'record_pdf' %}" method="post">
+        {% csrf_token %}
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Enviar Dados</button>
+            </div>
+        </div>
+        <div>
+            <span>Contas do Cotidiano</span>
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Infos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for conta in list_line %}
+                        <tr>
+                            <td><input name="selecionar" type="checkbox" value="{{ conta }}"></td>
+                            <td>{{ conta }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            <span>Contas Parceladas</span>
+            <ul>
+                {% for parceladas in lista_contas_parceladas %}
+                    <li>{{ parceladas }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </form>
+{% endblock content %}
