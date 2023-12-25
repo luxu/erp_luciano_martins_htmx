@@ -161,7 +161,26 @@ def record_pdf(request):
     return render(request, template_name, context)
 
 
-def read_bank_itau():
+def access_itau(request):
+    template_name = 'gasto/result_itau.html'
+    dados_itau = internetbaking()
+    # dados_itau = {
+    #     "01/01/2023": {"descricao": "Compra", "preco": 100.0},
+    #     "02/01/2023": {"descricao": "Venda", "preco": 150.0},
+    # }
+    context = {
+        "dados_itau": dados_itau,
+    }
+    """
+    DATA..:2023-12-23
+    DESCRIÇÃO..Drogasil    -ct
+    VALOR..40,19
+    27
+    """
+    return render(request, template_name, context)
+
+
+def internetbaking():
     itau = Itau(
         agency="4533",
         account="27693",
@@ -176,14 +195,23 @@ def read_bank_itau():
         "lancamentosNacionais"
     ]["titularidades"][0]["lancamentos"]
     line = "-" * 80
-    for index, item in enumerate(fatura_atual):
+    list_infos = {}
+    for item in fatura_atual:
         # for index, item in enumerate(fatura_passada):
         data = item["data"]
         descricao = item["descricao"]
         valor = item["valor"]
-        print(
-            f"{line}\nDATA..:{data}\nDESCRIÇÃO..{descricao}\nVALOR..{valor}\n{index + 1}"
-        )
+        list_infos = {
+            'data': data,
+            'info': {
+                'descricao': descricao,
+                'valor': valor
+            }
+    }
+    print(
+        f"{line}\nDATA..:{data}\nDESCRIÇÃO..{descricao}\nVALOR..{valor}"
+    )
+    return list_infos
 
 
 def read_itau_txt(request):

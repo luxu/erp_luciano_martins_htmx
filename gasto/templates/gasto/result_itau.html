@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content%}
+    <div class="container">
+        <h1>Dados do Itaú</h1>
+        <div class="table-condensed">
+            <table class="table table-striped tsble-hover">
+                <thead>
+                    <tr>
+                        <th>Data</th>
+                        <th>Descrição</th>
+                        <th>Preço</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data, info in dados_itau.items %}
+                    <tr>
+                        <td>{{ data }}</td>
+                        <td>{{ info.descricao }}</td>
+                        <td>{{ info.preco }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock content%}
