@@ -84,60 +84,72 @@ class AutoCompleteView(FormView):
             return HttpResponse(results)
 
 
+def extrair_texto_do_pdf(pdf_file):
+    pdf_document = fitz.open(stream=pdf_file.read(), filetype="pdf")
+    return "".join(page.get_text() for page in pdf_document)
+
+
 def read_pdf(request):
     template_name = "gasto/pdf.html"
+    context = {}
+
     if request.method == "POST":
-        pdf_file = request.FILES["pdf_file"]
-        pdf_document = fitz.open(stream=pdf_file.read(), filetype="pdf")
-        texto = ""
-        for pagina in pdf_document:
-            texto += pagina.get_text()
-        tabelas = texto.split("Data")[1:]
-        padrao = r"\b\d{2}/\d{2}\b"
-        cont = 1
-        table_lancamentos = None
-        lista_contas_parceladas = []
-        context = {}
-        list_line = []
-        for page in tabelas:
-            texts = page.split("\n")
-            line = ""
-            for text in texts:
-                if "Lançamentos em processamento" in text:
-                    table_lancamentos = tabelas[-1]
-                    break
-                else:
-                    if re.search(padrao, text):
-                        line = text
-                    if "," in text:
-                        line += text
-                        if "PARC" in line:
-                            lista_contas_parceladas.append(line)
-                        else:
-                            if re.search(padrao, line):
-                                list_line.append(line)
-                                cont += 1
-                                line = ""
-            if table_lancamentos:
+        pdf_file = request.FILES.get("pdf_file")
+        if pdf_file:
+            texto = extrair_texto_do_pdf(pdf_file)
+            tabelas = dividir_texto_em_tabelas(texto)
+            dados = processar_tabelas(tabelas)
+
+            context["dados"] = dados
+
+    return render(request, template_name, context)
+
+
+def dividir_texto_em_tabelas(context, texto):
+    # tabelas = texto.split("Data")[1:]
+    return texto.split("Data")[1:]
+
+
+def processar_tabelas(tabelas):
+    padrao = r"\b\d{2}/\d{2}\b"
+    table_lancamentos = None
+    lista_contas_parceladas = []
+    list_line = []
+    context = {}
+    for page in tabelas:
+        texts = page.split("\n")
+        line = ""
+        for text in texts:
+            if "Lançamentos em processamento" in text:
+                table_lancamentos = tabelas[-1]
                 break
-        context["list_line"] = list_line
-        if lista_contas_parceladas:
-            list_parcela = []
-            for parcela in lista_contas_parceladas:
-                list_parcela.append(parcela)
-            context["lista_contas_parceladas"] = list_parcela
-        if table_lancamentos:
-            texts = table_lancamentos.split("\n")
-            line = ""
-            for text in texts[3:]:
+            else:
                 if re.search(padrao, text):
                     line = text
-                else:
-                    line += text
                 if "," in text:
-                    line = ""
-        return render(request, template_name, context)
-    return render(request, template_name)
+                    line += text
+                    if "PARC" in line:
+                        lista_contas_parceladas.append(line)
+                    else:
+                        if re.search(padrao, line):
+                            list_line.append(line)
+                            line = ""
+        if table_lancamentos:
+            break
+    context["list_line"] = list_line
+    # if lista_contas_parceladas:
+    #     context["lista_contas_parceladas"] = lista_contas_parceladas
+    # if table_lancamentos:
+    #     texts = table_lancamentos.split("\n")
+    #     line = ""
+    #     for text in texts[3:]:
+    #         if re.search(padrao, text):
+    #             line = text
+    #         else:
+    #             line += text
+    #         if "," in text:
+    #             line = ""
+    return context
 
 
 def expenses_pdf(request):
