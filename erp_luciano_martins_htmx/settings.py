@@ -4,7 +4,6 @@ from pathlib import Path
 from decouple import Csv, config
 from dj_database_url import parse as db_url
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 ROOT_DIR = Path(__file__).resolve().parent
 
@@ -15,7 +14,8 @@ SECRET_KEY = config("SECRET_KEY")
 ALLOWED_HOSTS = config("ALLOWED_HOSTS", cast=Csv())
 
 INSTALLED_APPS = [
-    "admin_volt.apps.AdminVoltConfig",
+    "adminlte3_theme",
+    "adminlte3",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",

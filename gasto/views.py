@@ -38,7 +38,7 @@ def GastoSearchView(request):
 
 class GastoCreateView(CreateView):
     model = Gasto
-    template_name = "localization/localization_form.html"
+    # template_name = "localization/localization_form.html"
     form_class = GastoForm
     # success_url = "website/localization/localization_result.html"
 
@@ -140,8 +140,9 @@ def read_pdf(request):
     return render(request, template_name)
 
 
-def record_pdf(request):
-    template_name = "gasto/record_pdf.html"
+def expenses_pdf(request):
+    """Despesas que foram escolhidas do PDF do BB a serem inseridas no banco de dados"""
+    template_name = "gasto/expenses_pdf.html"
     dados_selecionados = request.POST.getlist("selecionar")
     lista_dados = []
     for item in dados_selecionados:
@@ -162,21 +163,54 @@ def record_pdf(request):
 
 
 def access_itau(request):
-    template_name = 'gasto/result_itau.html'
-    dados_itau = internetbaking()
+    template_name = "gasto/result_itau.html"
+    # lista = internetbaking()
     # dados_itau = {
-    #     "01/01/2023": {"descricao": "Compra", "preco": 100.0},
-    #     "02/01/2023": {"descricao": "Venda", "preco": 150.0},
+    #     "01/01/2023": {"descricao": "Compra", "valor": 100.0},
+    #     "02/01/2023": {"descricao": "Venda", "valor": 150.0},
     # }
+
+    # dados_itau = {
+    #     'data': '2023-12-23',
+    #     'info': {
+    #         'descricao': 'Drogasil    -ct',
+    #          'valor': '40,19'
+    #     }
+    # }
+
+    # dados_itau = {
+    #     '2023-12-23': {
+    #         'descricao': 'Drogasil    -ct',
+    #          'valor': '40,19'
+    #     }
+    # }
+    lista = [
+        {"2023-12-01": {"descricao": "Sesc Pres Prudente", "valor": "38,00"}},
+        {"2023-12-01": {"descricao": "Supermerc Nagai Pp", "valor": "16,75"}},
+        {"2023-12-01": {"descricao": "Dm          *tvexpress", "valor": "25,90"}},
+    ]
+
+    dados_itau = {}
+
+    # Iterando pela lista e adicionando os valores ao dicionário
+    for item in lista:
+        for chave, valor in item.items():
+            data = chave  # Obtendo a chave (data)
+            desc = valor["descricao"]  # Obtendo a descrição
+            valor_desc = valor["valor"]  # Obtendo o valor
+
+            if data in dados_itau:
+                # Verificando o número de entradas existentes para a data e adicionando o próximo número
+                count = len([k for k in dados_itau.keys() if k.startswith(data)])
+                # count = len(dados_itau[data])
+                nova_chave = f"{data}-{count + 1}"
+                dados_itau[nova_chave] = {"descricao": desc, "valor": valor_desc}
+            else:
+                dados_itau[data] = {"descricao": desc, "valor": valor_desc}
+
     context = {
         "dados_itau": dados_itau,
     }
-    """
-    DATA..:2023-12-23
-    DESCRIÇÃO..Drogasil    -ct
-    VALOR..40,19
-    27
-    """
     return render(request, template_name, context)
 
 
@@ -191,39 +225,33 @@ def internetbaking():
     # fatura_passada = itau.get_credit_card_invoice()["object"]["faturas"][0][
     #     "lancamentosNacionais"
     # ]["titularidades"][0]["lancamentos"]
+
     fatura_atual = itau.get_credit_card_invoice()["object"]["faturas"][1][
         "lancamentosNacionais"
     ]["titularidades"][0]["lancamentos"]
-    line = "-" * 80
-    list_infos = {}
+
+    list_infos = []
     for item in fatura_atual:
-        # for index, item in enumerate(fatura_passada):
+        # for item in fatura_passada:
         data = item["data"]
         descricao = item["descricao"]
         valor = item["valor"]
-        list_infos = {
-            'data': data,
-            'info': {
-                'descricao': descricao,
-                'valor': valor
-            }
-    }
-    print(
-        f"{line}\nDATA..:{data}\nDESCRIÇÃO..{descricao}\nVALOR..{valor}"
-    )
+        dict_infos = {str(data): {"descricao": descricao, "valor": valor}}
+        list_infos.append(dict_infos)
     return list_infos
 
 
 def read_itau_txt(request):
     template_name = "gasto/itau_txt.html"
-    fatura_passada = []
-    fatura_atual = []
+    # fatura_passada = []
+    # fatura_atual = []
     if request.method == "POST":
         itau_file = request.FILES["itau_file"]
         resultado = itau_file.read().decode("utf-8").split("\n")
         for info in resultado:
             print(info)
-        context = {"fatura_passada": fatura_passada, "fatura_atual": fatura_atual}
+        # context = {"fatura_passada": fatura_passada, "fatura_atual": fatura_atual}
+        context = {"fatura_atual": resultado}
         return render(request, template_name, context)
 
     return render(request, template_name)

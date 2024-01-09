@@ -16,6 +16,6 @@ urlpatterns = [
     ),
     path("pdf/", views.read_pdf, name="read_pdf"),
     path("access_itau/", views.access_itau, name="access_itau"),
-    path("record_pdf/", views.record_pdf, name="record_pdf"),
+    path("expenses_pdf/", views.expenses_pdf, name="expenses_pdf"),
     path("itau/", views.read_itau_txt, name="read_itau_txt"),
 ]

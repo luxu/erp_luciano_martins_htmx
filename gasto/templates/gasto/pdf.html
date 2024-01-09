@@ -5,11 +5,11 @@
         {% csrf_token %}
         <div class="form-control">
             <label for="">Pdf</label>
-            <input type="file" name="pdf_file">
+            <input type="file" name="pdf_file" accept="application/pdf">
             <button class="btn btn-primary" type="submit">Enviar</button>
         </div>
     </form>
-    <form action="{% url 'record_pdf' %}" method="post">
+    <form action="{% url 'expenses_pdf' %}" method="post">
         {% csrf_token %}
         <div class="row">
             <div class="col-12">

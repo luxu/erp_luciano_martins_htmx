@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Dados do BB para salvar - Gasto</h1>
+    <ul>
+        {% for itens in lista_dados %}
+            <li>{{ itens }}</li>
+        {% endfor %}
+    </ul>
+    <form action="">
+        <input type="hidden" value="{{ lista_dados }}">
+        <button class="btn btn-primary">Gravar no Banco</button>
+    </form>
+{% endblock content %}

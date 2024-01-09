@@ -10,7 +10,7 @@
       <a href="" class="btn btn-primary"
         data-toggle="modal"
         data-target="#addModal"
-        hx-get="{ url 'website:city_create' %}"
+        hx-get="{% url 'gasto_create' %}"
         hx-target="#addContent"
         hx-swap="innerHTML">
         Adicionar
@@ -54,9 +54,29 @@
 
 {% block js %}
 <script>
-// Necessário por causa do delete
-document.body.addEventListener('htmx:configRequest', (event) => {
-  event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
-});
+
+    ; (function () {
+      const modal = new bootstrap.Modal(document.getElementById("modal"))
+
+      htmx.on("htmx:afterSwap", (e) => {
+        // Response targeting #dialog => show the modal
+        if (e.detail.target.id == "addContent") {
+          modal.show()
+        }
+      })
+
+      htmx.on("htmx:beforeSwap", (e) => {
+        // Empty response targeting #dialog => hide the modal
+        if (e.detail.target.id == "addContent" && !e.detail.xhr.response) {
+          modal.hide()
+          e.detail.shouldSwap = false
+        }
+      })
+
+      // Remove dialog content after hiding
+      htmx.on("hidden.bs.modal", () => {
+        document.getElementById("addContent").innerHTML = ""
+      })
+    })()
 </script>
 {% endblock js %}
