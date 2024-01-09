@@ -1,7 +1,8 @@
 import re
 
 import fitz
-from decouple import config
+
+# from decouple import config
 from django.http import HttpResponse
 from django.shortcuts import render
 from django.views.generic import (
@@ -12,10 +13,11 @@ from django.views.generic import (
     ListView,
     UpdateView,
 )
-from pyitau import Itau
 
 from .forms import GastoForm
 from .models import Gasto
+
+# from pyitau import Itau
 
 
 class GastoListView(ListView):
@@ -226,31 +228,31 @@ def access_itau(request):
     return render(request, template_name, context)
 
 
-def internetbaking():
-    itau = Itau(
-        agency="4533",
-        account="27693",
-        account_digit="9",
-        password=config("ITAU_PASSWORD"),
-    )
-    itau.authenticate()
-    # fatura_passada = itau.get_credit_card_invoice()["object"]["faturas"][0][
-    #     "lancamentosNacionais"
-    # ]["titularidades"][0]["lancamentos"]
-
-    fatura_atual = itau.get_credit_card_invoice()["object"]["faturas"][1][
-        "lancamentosNacionais"
-    ]["titularidades"][0]["lancamentos"]
-
-    list_infos = []
-    for item in fatura_atual:
-        # for item in fatura_passada:
-        data = item["data"]
-        descricao = item["descricao"]
-        valor = item["valor"]
-        dict_infos = {str(data): {"descricao": descricao, "valor": valor}}
-        list_infos.append(dict_infos)
-    return list_infos
+# def internetbaking():
+#     itau = Itau(
+#         agency="4533",
+#         account="27693",
+#         account_digit="9",
+#         password=config("ITAU_PASSWORD"),
+#     )
+#     itau.authenticate()
+#     # fatura_passada = itau.get_credit_card_invoice()["object"]["faturas"][0][
+#     #     "lancamentosNacionais"
+#     # ]["titularidades"][0]["lancamentos"]
+#
+#     fatura_atual = itau.get_credit_card_invoice()["object"]["faturas"][1][
+#         "lancamentosNacionais"
+#     ]["titularidades"][0]["lancamentos"]
+#
+#     list_infos = []
+#     for item in fatura_atual:
+#         # for item in fatura_passada:
+#         data = item["data"]
+#         descricao = item["descricao"]
+#         valor = item["valor"]
+#         dict_infos = {str(data): {"descricao": descricao, "valor": valor}}
+#         list_infos.append(dict_infos)
+#     return list_infos
 
 
 def read_itau_txt(request):
